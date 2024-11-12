@@ -14,15 +14,15 @@ namespace Characters
         public CharacterConfigData config;
         public Animator animator;
 
-        //Coroutine
+        // Coroutine references
         protected Coroutine co_Showing, co_hiding;
 
         protected CharacterManager manager => CharacterManager.Instance;
         public DialogController dialogController => DialogController.Instance;
 
         public bool isShowing => co_Showing != null;
-        public bool isHidding => co_hiding != null;
-        public virtual bool isVisible => false;
+        public bool isHiding => co_hiding != null;
+        public virtual bool isVisible => mainGame != null && mainGame.gameObject.activeSelf;
 
         public Character(string name, CharacterConfigData config, GameObject prefab)
         {
@@ -37,14 +37,18 @@ namespace Characters
                 mainGame = ob.GetComponent<RectTransform>();
                 animator = mainGame.GetComponentInChildren<Animator>();
             }
+            else
+            {
+                Debug.LogError("Prefab is null. Character cannot be instantiated.");
+            }
         }
 
         public Coroutine Say(string dialogue) => Say(new List<string>() { dialogue });
-        
+
         public Coroutine Say(List<string> dialogue)
         {
             dialogController.showSpeakerName(displayName);
-            UpdateTextCostumizationOnScreen();
+            UpdateTextCustomizationOnScreen();
             return dialogController.Say(dialogue);
         }
 
@@ -53,31 +57,29 @@ namespace Characters
         public void SetNameColor(Color color) => config.nameColor = color;
         public void SetDialogueColor(Color color) => config.dialogueColor = color;
 
-        public void ResetConfiguratioData() => config = CharacterManager.Instance.GetCharacterConfig(name);
+        public void ResetConfigurationData() => config = CharacterManager.Instance.GetCharacterConfig(name);
 
-        public void UpdateTextCostumizationOnScreen() => dialogController.ApplySpeakerDataToDialogContainer(config);
+        public void UpdateTextCustomizationOnScreen() => dialogController.ApplySpeakerDataToDialogContainer(config);
 
         public virtual Coroutine Show()
         {
-            if(isShowing)
+            if (isShowing)
                 return co_Showing;
-            if (isHidding)
+            if (isHiding)
                 manager.StopCoroutine(co_hiding);
 
             co_Showing = manager.StartCoroutine(ShowOrHidingCharacter(true));
-
             return co_Showing;
         }
 
         public virtual Coroutine Hide()
         {
-            if (isHidding)
+            if (isHiding)
                 return co_hiding;
             if (isShowing)
                 manager.StopCoroutine(co_Showing);
 
             co_hiding = manager.StartCoroutine(ShowOrHidingCharacter(false));
-
             return co_hiding;
         }
 
@@ -95,6 +97,5 @@ namespace Characters
             Live2D,
             Model3D
         }
-
     }
 }

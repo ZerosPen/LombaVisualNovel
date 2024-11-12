@@ -9,6 +9,7 @@ namespace TESTING
 {
     public class Test_Char : MonoBehaviour
     {
+        private Character CreatCharacter(string name) => CharacterManager.Instance.createChracter(name);
 
         public TMP_FontAsset tempFont;
         // Start is called before the first frame update
@@ -23,17 +24,27 @@ namespace TESTING
 
         IEnumerator Test()
         {
-            Character Raelin = CharacterManager.Instance.createChracter("Raelin");
+            Character guard1 = CreatCharacter("Guard1 as Generic");
+            Character guard2 = CreatCharacter("Guard2 as Generic");
+            Character guard3 = CreatCharacter("Guard3 as Generic");
 
-            yield return new WaitForSeconds(1f);
+            guard1.Show();
+            guard2.Show();
+            guard3.Show();
 
-            yield return Raelin.Hide();
 
-            yield return new WaitForSeconds(0.5f);
+            //guard1.SetDialogueFont(tempFont);
+            //guard1.SetDialogueColor(Color.yellow);
+            //guard2.SetDialogueColor(Color.gray);
+            //guard3.SetDialogueColor(Color.blue);
 
-            yield return Raelin.Show();
 
-            yield return Raelin.Say("Hello");
+            guard1.Say("Hello, why are you steal this money? {wc 1} what for this money?");
+            guard1.Say("Let them talk First!");
+            guard1.Say("GO {wc 1} SPEAK NOW!");
+
+
+            yield return null;
         }
 
         // Update is called once per frame

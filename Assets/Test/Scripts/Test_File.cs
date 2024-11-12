@@ -13,7 +13,7 @@ public class Test_File : MonoBehaviour
 
     IEnumerator Run()
     {
-        List<string> lines = FileManager.readTxtAsset(fileName, false);
+        List<string> lines = FileManager.readTxtAsset(fileName);
 
         foreach (string line in lines)
         {

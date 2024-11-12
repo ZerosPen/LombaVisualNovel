@@ -54,6 +54,7 @@ namespace DIALOGUE
                 if (line.hasDialogue)
                 {
                     yield return Line_RunDialogue(line);
+                    yield return new WaitForSeconds(1);
                 }
 
                 // shoew commmand
@@ -61,10 +62,6 @@ namespace DIALOGUE
                 {
                     yield return Line_RunCommands(line);
                 }
-
-                if(line.hasDialogue)
-                    //wiat for userInput
-                    yield return WaitForUserInput();
             }
         }
         IEnumerator Line_RunDialogue(DailogLine line)
@@ -76,12 +73,14 @@ namespace DIALOGUE
             //build dailog
             yield return BuildLineSegments(line.dialogueData);
 
+            //wiat for userInput
+            yield return WaitForUserInput();
         }
 
-        IEnumerator Line_RunCommands(DailogLine line)
+            IEnumerator Line_RunCommands(DailogLine line)
         {
-           List<DL_CommandData.Command> commands = line.commandData.commands;
-           foreach(DL_CommandData.Command command in commands)
+            List<DL_CommandData.Command> commands = line.commandData.commands;
+            foreach (DL_CommandData.Command command in commands)
             {
                 if (command.waitForComplete)
                 {
@@ -90,12 +89,12 @@ namespace DIALOGUE
                 else
                     CommandManager.Instance.Executed(command.name, command.arguments);
             }
-           yield return null;
+            yield return null;
         }
 
         IEnumerator BuildLineSegments(DL_DialogueData line)
         {
-            for(int i = 0; i < line.segments.Count; i++)
+            for (int i = 0; i < line.segments.Count; i++)
             {
                 DL_DialogueData.Dialogue_Segment segment = line.segments[i];
 
@@ -108,7 +107,7 @@ namespace DIALOGUE
 
         IEnumerator WaitForDialogueSegmentSingalToTrigger(DL_DialogueData.Dialogue_Segment segment)
         {
-            switch(segment.startSingal)
+            switch (segment.startSingal)
             {
                 case DL_DialogueData.Dialogue_Segment.StartSingal.C:
                 case DL_DialogueData.Dialogue_Segment.StartSingal.A:

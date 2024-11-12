@@ -8,7 +8,7 @@ namespace DIALOGUE
 {
     public class DialogController : MonoBehaviour
     {
-        [SerializeField]private DialogueControllerConfigSO _config;
+        [SerializeField] private DialogueControllerConfigSO _config;
         public DialogueControllerConfigSO config => _config;
         public DialogContainer DialogContainer = new DialogContainer(); // Reference to DialogContainer
         private ConversationManager conversationManager;
@@ -66,9 +66,9 @@ namespace DIALOGUE
             DialogContainer.nameContainer.SetNameFont(config.nameFont);
         }
 
-        public void showSpeakerName(string speakerName = "") 
+        public void showSpeakerName(string speakerName = "")
         {
-            if(speakerName.ToLower() != "narrator")
+            if (speakerName.ToLower() != "narrator")
             {
                 DialogContainer.nameContainer.show(speakerName);
             }
